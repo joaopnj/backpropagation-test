@@ -1,10 +1,15 @@
 var express = require('express');
+var load = require('express-load');
 var path = require('path');
 var cookieParser = require('cookie-parser');
 var logger = require('morgan');
 
-var indexRouter = require('./routes/index');
-var usersRouter = require('./routes/users');
+// var propagationService = require('./services/propagation-service');
+load('services').into(express);
+
+var service   = express.services.propagationService;
+
+service.init();
 
 var app = express();
 
@@ -13,8 +18,5 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
-
-app.use('/', indexRouter);
-app.use('/users', usersRouter);
 
 module.exports = app;
